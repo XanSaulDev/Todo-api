@@ -5,9 +5,8 @@ from rest_framework import status
 from .serializers import UserSerializerRegister,UserSerializer
 from .models import User
 
-class User(APIView):
+class UserView(APIView):
   
-
   def post(self,request):
     data_user = request.data
     data_user_serialized = UserSerializerRegister(data=data_user)
