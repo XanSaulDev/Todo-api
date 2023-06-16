@@ -16,7 +16,7 @@ class UserSerializerRegister(serializers.ModelSerializer):
     password = data.get('password')
     password_confirm = data.pop('password_confirm')
     if password != password_confirm:
-      raise ValidationError({'password':'the passwords must be equals'})
+      raise ValidationError({'password':'Las contraseñas deben coincidir.'})
     return data
 
   def create (self, validated_data):
