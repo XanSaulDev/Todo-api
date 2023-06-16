@@ -31,3 +31,24 @@ class UserView(APIView):
       status.HTTP_200_OK
       )
 
+  def put(self,request,*args,**kwargs):
+    user = User.objects.filter(id=request.data.get('id')).first()
+    print(user)
+    users_serialized = UserSerializer(user,data=request.data,partial=True)
+    if not users_serialized.is_valid():
+      return Response(
+      {
+        'ok': False,
+        'errors': users_serialized.error_messages
+      },
+      status.HTTP_400_BAD_REQUEST
+    )
+    users_serialized.save()
+
+    return Response(
+      {
+        'ok': True,
+        'user': users_serialized.data
+      },
+      status.HTTP_200_OK
+    )
