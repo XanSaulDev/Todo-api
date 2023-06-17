@@ -7,6 +7,34 @@ from .models import User
 
 class UserView(APIView):
   
+  def get(self,request,*args,**kwargs):
+    
+    user_id = kwargs.get('id')
+    user = User.objects.filter(id=user_id).first()
+
+    if not user_id or not user:
+      return Response(
+      {
+        'ok':False,
+        'errors': {
+          'user': [
+            'Usuario no encontrado.'
+            ]
+        }
+      },
+      status.HTTP_404_NOT_FOUND
+    )
+
+    user_serialized = UserSerializer(user)
+    
+    return Response(
+      {
+        'ok':True,
+        'user': user_serialized.data
+      },
+      status.HTTP_200_OK
+    )
+
   def post(self,request):
     data_user = request.data
     data_user_serialized = UserSerializerRegister(data=data_user)
@@ -49,6 +77,35 @@ class UserView(APIView):
       {
         'ok': True,
         'user': users_serialized.data
+      },
+      status.HTTP_200_OK
+    )
+  
+  def delete(self,request,*args,**kwargs):
+
+    user_id = kwargs.get('id')
+    user = User.objects.filter(id=user_id).first()
+
+    if not user_id or not user:
+      return Response(
+      {
+        'ok':False,
+        'errors': {
+          'user': [
+            'Usuario no encontrado.'
+            ]
+        }
+      },
+      status.HTTP_404_NOT_FOUND
+    )
+
+
+    user.delete()
+    
+    return Response(
+      {
+        'ok':True,
+        'success': 'Cuenta borrada exitosamente.'
       },
       status.HTTP_200_OK
     )
