@@ -82,9 +82,11 @@ class UserView(APIView):
     )
   
   def delete(self,request,*args,**kwargs):
-    user_id = kwargs.get('id')
 
-    if not user_id:
+    user_id = kwargs.get('id')
+    user = User.objects.filter(id=user_id).first()
+
+    if not user_id or not user:
       return Response(
       {
         'ok':False,
@@ -97,7 +99,6 @@ class UserView(APIView):
       status.HTTP_404_NOT_FOUND
     )
 
-    user = User.objects.filter(id=user_id).first()
 
     user.delete()
     
