@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import UserSerializerRegister,UserSerializer
 from .models import User
@@ -50,13 +51,15 @@ class UserView(APIView):
 
     user_response=data_user_serialized.save()
     user = UserSerializer(user_response)
-    
+    refresh = RefreshToken.for_user(user_response)
     return Response(
       {
         'ok': True,
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
         'user' : user.data,
       },
-      status.HTTP_200_OK
+      status.HTTP_201_CREATED
       )
 
   def put(self,request,*args,**kwargs):
