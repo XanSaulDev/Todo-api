@@ -23,7 +23,6 @@ class UserView(APIView):
       },
       status.HTTP_404_NOT_FOUND
     )
-
     user = User.objects.filter(id=user_id).first()
 
     user_serialized = UserSerializer(user)
@@ -78,6 +77,34 @@ class UserView(APIView):
       {
         'ok': True,
         'user': users_serialized.data
+      },
+      status.HTTP_200_OK
+    )
+  
+  def delete(self,request,*args,**kwargs):
+    user_id = kwargs.get('id')
+
+    if not user_id:
+      return Response(
+      {
+        'ok':False,
+        'errors': {
+          'user': [
+            'Usuario no encontrado.'
+            ]
+        }
+      },
+      status.HTTP_404_NOT_FOUND
+    )
+
+    user = User.objects.filter(id=user_id).first()
+
+    user.delete()
+    
+    return Response(
+      {
+        'ok':True,
+        'success': 'Cuenta borrada exitosamente.'
       },
       status.HTTP_200_OK
     )
