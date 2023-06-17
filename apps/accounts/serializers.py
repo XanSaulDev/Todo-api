@@ -31,6 +31,11 @@ class UserSerializerRegister(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+  full_name = serializers.SerializerMethodField()
+
+  def get_full_name(self,obj):
+    return obj.get_full_name()
+  
   class Meta:
     model = User
-    fields = ['email','first_name','last_name']
+    fields = ['email','first_name','last_name','full_name']
