@@ -7,6 +7,35 @@ from .models import User
 
 class UserView(APIView):
   
+  def get(self,request,*args,**kwargs):
+    
+    user_id = kwargs.get('id')
+
+    if not user_id:
+      return Response(
+      {
+        'ok':False,
+        'errors': {
+          'user': [
+            'Usuario no encontrado.'
+            ]
+        }
+      },
+      status.HTTP_404_NOT_FOUND
+    )
+
+    user = User.objects.filter(id=user_id).first()
+
+    user_serialized = UserSerializer(user)
+    
+    return Response(
+      {
+        'ok':True,
+        'user': user_serialized.data
+      },
+      status.HTTP_200_OK
+    )
+
   def post(self,request):
     data_user = request.data
     data_user_serialized = UserSerializerRegister(data=data_user)
