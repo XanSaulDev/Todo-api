@@ -8,7 +8,7 @@ from .serializers import TodoSerializer,TodoSerializerCreate
 
 
 class TodoView(APIView):
-
+  permission_classes = [IsAuthenticated]
 
   def get(self,request,*args,**kwargs):
     user = request.user
