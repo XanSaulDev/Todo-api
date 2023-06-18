@@ -35,11 +35,12 @@ class TodoView(APIView):
       },
       status.HTTP_406_NOT_ACCEPTABLE
       )
-    data_serialized.save()
+    todo = data_serialized.save()
+    todo_serialized = TodoSerializer(todo)
     return Response(
     {
       'ok':True,
-      'todo': data_serialized.data
+      'todo': todo_serialized.data
     },
     status.HTTP_406_NOT_ACCEPTABLE
     )
