@@ -60,4 +60,19 @@ class TodoView(APIView):
       'todo': todo_serialized.data
     },status.HTTP_202_ACCEPTED)
   
-
+  def delete(self,request,*args,**kwargs):
+    user = request.user
+    id_todo = request.data.get('id')
+    todo = Todo.objects.filter(id_owner=user).filter(id=id_todo).first()
+    if not todo:
+      return Response({
+        'ok': False,
+        'errors': ['Todo no encontrado.']
+      },status.HTTP_202_ACCEPTED)
+    
+    todo.delete()
+    return Response({
+      'ok': True,
+      'success': 'Todo eliminado correctamente.'
+    },status.HTTP_202_ACCEPTED)
+  
