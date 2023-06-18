@@ -5,7 +5,7 @@ from apps.accounts.models import User
 class Todo(models.Model):
   id_owner = models.ForeignKey(User,on_delete=models.CASCADE)
   title = models.CharField(max_length=50,blank=False)
-  content = models.CharField(max_length=250)
+  detail = models.CharField(max_length=250,blank=True,null=True,default="")
   is_completed = models.BooleanField(default=False)
 
   def __str__(self):
