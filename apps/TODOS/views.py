@@ -6,7 +6,6 @@ from rest_framework import status
 from .models import Todo
 from .serializers import TodoSerializer,TodoSerializerCreate
 
-
 class TodoView(APIView):
   permission_classes = [IsAuthenticated]
 
@@ -44,3 +43,21 @@ class TodoView(APIView):
     },
     status.HTTP_406_NOT_ACCEPTABLE
     )
+
+  def put(self,request,*args,**kwargs):
+    user = request.user
+    id_todo = request.data.get('id')
+    todo = Todo.objects.filter(id_owner=user).filter(id=id_todo).first()
+    todo_serialized = TodoSerializer(todo,data=request.data,partial=True)
+    if not todo_serialized.is_valid():
+      return Response({
+        'ok': False,
+        'errors': todo_serialized.errors
+      },status.HTTP_400_BAD_REQUEST)
+    todo_serialized.save()
+    return Response({
+      'ok': True,
+      'todo': todo_serialized.data
+    },status.HTTP_202_ACCEPTED)
+  
+
