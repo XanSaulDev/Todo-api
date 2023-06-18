@@ -1,6 +1,6 @@
-from django.urls import path
-from .views import Test
+from django.urls import path, include
+from .views import TodoView
 
 urlpatterns = [
-  path('',Test.as_view(),name='todos')
+  path('',TodoView.as_view())
 ]
