@@ -6,14 +6,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserSerializerRegister,UserSerializer
 from .models import User
 
+# TODO: Refactor duplicate code
+
 class UserView(APIView):
   
   def get(self,request,*args,**kwargs):
-    
-    user_id = kwargs.get('id')
-    user = User.objects.filter(id=user_id).first()
-
-    if not user_id or not user:
+    user = request.user
+    if user.is_anonymous:
       return Response(
       {
         'ok':False,
@@ -63,8 +62,19 @@ class UserView(APIView):
       )
 
   def put(self,request,*args,**kwargs):
-    user = User.objects.filter(id=request.data.get('id')).first()
-    print(user)
+    user = request.user
+    if user.is_anonymous:
+      return Response(
+      {
+        'ok':False,
+        'errors': {
+          'user': [
+            'Usuario no encontrado.'
+            ]
+        }
+      },
+      status.HTTP_404_NOT_FOUND
+    )
     users_serialized = UserSerializer(user,data=request.data,partial=True)
     if not users_serialized.is_valid():
       return Response(
@@ -86,10 +96,9 @@ class UserView(APIView):
   
   def delete(self,request,*args,**kwargs):
 
-    user_id = kwargs.get('id')
-    user = User.objects.filter(id=user_id).first()
+    user = request.user
 
-    if not user_id or not user:
+    if user.is_anonymous:
       return Response(
       {
         'ok':False,
