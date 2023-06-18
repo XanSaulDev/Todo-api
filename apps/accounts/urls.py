@@ -7,5 +7,5 @@ from .CustomToken import CustomTokenResponse
 urlpatterns = [ 
   path('',UserView.as_view()),
   path('<int:id>',UserView.as_view()),
-  path('signin',CustomTokenResponse.as_view()),
+  path('login',CustomTokenResponse.as_view()),
 ]
