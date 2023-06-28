@@ -2,18 +2,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
 from .serializers import UserSerializerRegister,UserSerializer
 from .models import User
 
+# TODO: Refactor duplicate code
+
 class UserView(APIView):
   
   def get(self,request,*args,**kwargs):
-    
-    user_id = kwargs.get('id')
-    user = User.objects.filter(id=user_id).first()
-
-    if not user_id or not user:
+    user = request.user
+    if user.is_anonymous:
       return Response(
       {
         'ok':False,
@@ -63,8 +63,19 @@ class UserView(APIView):
       )
 
   def put(self,request,*args,**kwargs):
-    user = User.objects.filter(id=request.data.get('id')).first()
-    print(user)
+    user = request.user
+    if user.is_anonymous:
+      return Response(
+      {
+        'ok':False,
+        'errors': {
+          'user': [
+            'Usuario no encontrado.'
+            ]
+        }
+      },
+      status.HTTP_404_NOT_FOUND
+    )
     users_serialized = UserSerializer(user,data=request.data,partial=True)
     if not users_serialized.is_valid():
       return Response(
@@ -86,10 +97,9 @@ class UserView(APIView):
   
   def delete(self,request,*args,**kwargs):
 
-    user_id = kwargs.get('id')
-    user = User.objects.filter(id=user_id).first()
+    user = request.user
 
-    if not user_id or not user:
+    if user.is_anonymous:
       return Response(
       {
         'ok':False,
@@ -111,4 +121,31 @@ class UserView(APIView):
         'success': 'Cuenta borrada exitosamente.'
       },
       status.HTTP_200_OK
+    )
+  
+class LoginView(APIView):
+
+  def post(self,request,*args,**kwargs):
+
+    user = authenticate(**request.data)
+
+    if not user:
+      return Response({
+        'ok':False,
+        'errors':['No se encontró ningún usuario con las credenciales proporcionadas.']
+
+      },
+      status.HTTP_400_BAD_REQUEST
+      )
+    
+    refresh_token = RefreshToken.for_user(user)
+    access_token = refresh_token.access_token
+    user_serialized = UserSerializer(user)
+    return Response({
+      'ok':True,
+      'refresh': str(refresh_token),
+      'access': str(access_token),
+      'user': user_serialized.data
+    },
+    status.HTTP_200_OK
     )
