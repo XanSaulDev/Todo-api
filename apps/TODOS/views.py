@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Q
 
 from .models import Todo
 from .serializers import TodoSerializer,TodoSerializerCreate
@@ -76,3 +77,20 @@ class TodoView(APIView):
       'success': 'Todo eliminado correctamente.'
     },status.HTTP_202_ACCEPTED)
   
+
+class SearchTodo(APIView):
+  
+  def get(self,request,*args,**kwargs):
+
+    todos = Todo.objects.filter(  Q(title__icontains=request.data.get('search')) | 
+                                  Q(detail__icontains=request.data.get('search')))
+
+    data_serialized = TodoSerializer(todos,many=True)
+
+    return Response(
+      {
+      'ok': True,
+      'todos': data_serialized.data
+      },
+      status.HTTP_302_FOUND
+    )
