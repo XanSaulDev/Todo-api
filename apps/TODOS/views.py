@@ -41,7 +41,7 @@ class TodoView(APIView):
       'ok':True,
       'todo': todo_serialized.data
     },
-    status.HTTP_406_NOT_ACCEPTABLE
+    status.HTTP_201_CREATED
     )
 
   def put(self,request,*args,**kwargs):
