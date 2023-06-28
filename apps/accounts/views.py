@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
 from .serializers import UserSerializerRegister,UserSerializer
 from .models import User
@@ -120,4 +121,31 @@ class UserView(APIView):
         'success': 'Cuenta borrada exitosamente.'
       },
       status.HTTP_200_OK
+    )
+  
+class LoginView(APIView):
+
+  def post(self,request,*args,**kwargs):
+
+    user = authenticate(**request.data)
+
+    if not user:
+      return Response({
+        'ok':False,
+        'errors':['No se encontró ningún usuario con las credenciales proporcionadas.']
+
+      },
+      status.HTTP_400_BAD_REQUEST
+      )
+    
+    refresh_token = RefreshToken.for_user(user)
+    access_token = refresh_token.access_token
+    user_serialized = UserSerializer(user)
+    return Response({
+      'ok':True,
+      'refresh': str(refresh_token),
+      'access': str(access_token),
+      'user': user_serialized.data
+    },
+    status.HTTP_200_OK
     )
