@@ -66,10 +66,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.100.12:3000",
 ]
 
-ALLOWED_HOSTS=[
-    '*'
-]
-
 ROOT_URLCONF = 'Config.urls'
 
 TEMPLATES = [
