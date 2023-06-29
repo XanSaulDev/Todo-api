@@ -19,6 +19,6 @@
       "src": "/(.*)",
       "dest": "Config/wsgi.py"
     },
-    { "src": "/static/(.*)", "headers": { "Cache-Control": "max-age=31536000" }, "dest": "/static/$1" }
+    { "src": "/staticfiles/(.*)", "headers": { "Cache-Control": "max-age=31536000" }, "dest": "/staticfiles/$1" }
   ]
 }
