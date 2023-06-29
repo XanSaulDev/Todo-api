@@ -81,7 +81,7 @@ class UserView(APIView):
       return Response(
       {
         'ok': False,
-        'errors': users_serialized.error_messages
+        'errors': users_serialized.errors
       },
       status.HTTP_400_BAD_REQUEST
     )
