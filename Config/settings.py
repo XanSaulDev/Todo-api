@@ -67,7 +67,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://192.168.100.12:3000",
     "https://guileless-pudding-de38cb.netlify.app",
-    "https://xansauldev.github.io/"
+    "https://xansauldev.github.io"
 ]
 
 ROOT_URLCONF = 'Config.urls'
