@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     # project apps
-    'apps.todos',
+    'apps.TODOS',
     'apps.accounts',
     # third apps
     'rest_framework',
