@@ -10,7 +10,7 @@
       "src": "build_files.sh",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "staticfiles"
+        "distDir": "staticfiles_build"
       }
     }
   ],
@@ -19,6 +19,9 @@
       "src": "/(.*)",
       "dest": "Config/wsgi.py"
     },
-    { "src": "/staticfiles/(.*)", "headers": { "Cache-Control": "max-age=31536000" }, "dest": "/staticfiles/$1" }
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    }
   ]
 }
