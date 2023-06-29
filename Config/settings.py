@@ -147,7 +147,6 @@ STATIC_URL = 'static/'
 STATIC_ROOT = '/vercel/path0/staticfiles/static'
 STATICFILES_DIRS = [    
     BASE_DIR / "static",
-    '/vercel/path0/staticfiles/static',
     ]
 
 # Default primary key field type
