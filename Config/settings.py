@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app','localhost']
 
 
 # Application definition
@@ -93,7 +94,7 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'dbv.sqlite3',
     }
 }
 
@@ -133,13 +134,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_ROOT = '/static'
-
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    os.path.join(BASE_DIR, 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

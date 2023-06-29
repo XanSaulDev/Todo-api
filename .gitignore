@@ -8,6 +8,8 @@ media
 
 migrations
 static
+staticfiles_build
+staticfiles
 
 # Backup files # 
 *.bak 
