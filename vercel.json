@@ -30,6 +30,6 @@
   },
   "git": {
     "scopes": ["production"],
-    "ignoreNodes": ["main"]
+    "ignoreNodes": ["*", "!production"]
   }
 }
