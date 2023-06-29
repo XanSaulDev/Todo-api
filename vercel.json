@@ -29,6 +29,7 @@
     "autoAlias": false
   },
   "git": {
-    "scopes": ["production"]
+    "scopes": ["production"],
+    "ignoreNodes": ["main"]
   }
 }
