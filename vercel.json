@@ -5,13 +5,20 @@
       "src": "Config/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.8" }
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "staticfiles"
+      }
     }
-    
   ],
   "routes": [
     {
       "src": "/(.*)",
       "dest": "Config/wsgi.py"
-    }
+    },
+    { "src": "/static/(.*)", "headers": { "Cache-Control": "max-age=31536000" }, "dest": "/static/$1" }
   ]
 }
