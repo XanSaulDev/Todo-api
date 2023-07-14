@@ -107,7 +107,7 @@ class SearchTodo(APIView):
         'ok': True,
         'todos': data_serialized.data
         },
-        status.HTTP_302_FOUND
+        status.HTTP_200_OK
       )
     
     todos = Todo.objects.filter(id_owner=user.id)
