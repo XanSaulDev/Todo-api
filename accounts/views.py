@@ -36,32 +36,6 @@ class UserView(APIView):
       status.HTTP_200_OK
     )
 
-  def post(self,request):
-    data_user = request.data
-    data_user_serialized = UserSerializerRegister(data=data_user)
-
-    if not data_user_serialized.is_valid():
-      return Response(
-      {
-        'ok': False,
-        'errors' : data_user_serialized.errors
-      },
-      status.HTTP_400_BAD_REQUEST
-      )
-
-    user_response=data_user_serialized.save()
-    user = UserSerializer(user_response)
-    refresh = RefreshToken.for_user(user_response)
-    return Response(
-      {
-        'ok': True,
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-        'user' : user.data,
-      },
-      status.HTTP_201_CREATED
-      )
-
   def put(self,request,*args,**kwargs):
     user = request.user
     if user.is_anonymous:
@@ -149,3 +123,32 @@ class LoginView(APIView):
     },
     status.HTTP_200_OK
     )
+
+
+class RegisterView(APIView):
+    
+  def post(self,request):
+    data_user = request.data
+    data_user_serialized = UserSerializerRegister(data=data_user)
+
+    if not data_user_serialized.is_valid():
+      return Response(
+      {
+        'ok': False,
+        'errors' : data_user_serialized.errors
+      },
+      status.HTTP_400_BAD_REQUEST
+      )
+
+    user_response=data_user_serialized.save()
+    user = UserSerializer(user_response)
+    refresh = RefreshToken.for_user(user_response)
+    return Response(
+      {
+        'ok': True,
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+        'user' : user.data,
+      },
+      status.HTTP_201_CREATED
+      )
